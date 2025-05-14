@@ -1,6 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald:wght@500;700&display=swap');
+
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: "Open Sans", sans-serif;
+  --font-heading: "Oswald", sans-serif;
+  --color-primary: #c41e3a;
+  /*--color-dark: #01132a; */
+  --color-dark: #E01F26;
+}
+
+body {
+  font-family: var(--font-sans);
 }
