@@ -1,7 +1,6 @@
 import "~/styles/globals.css";
 import ResponsiveSidebar from "./_components/ResponsiveSidebar";
 import Footer from "./_components/Footer";
-import { TRPCReactProvider } from "~/trpc/react";
 import { Geist } from "next/font/google";
 import { type Metadata } from "next";
 import Script from "next/script"; // ✅ ADD THIS
@@ -33,7 +32,7 @@ export default function RootLayout({
 
         <ResponsiveSidebar />
         <main className="flex-1 md:ml-72">
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          {children}
           <Footer />
         </main>
       </body>
