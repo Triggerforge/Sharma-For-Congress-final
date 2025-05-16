@@ -1,0 +1,7 @@
+// ~/lib/getLatestPosts.ts
+import { sanity } from './sanity';
+import { getPostsQuery } from './queries';
+
+export async function getLatestPosts() {
+  return await sanity.fetch(getPostsQuery);
+}

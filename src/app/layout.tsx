@@ -14,7 +14,6 @@ const geist = Geist({
 export const metadata: Metadata = {
   title: "Sharma for Congress",
   description: "Official campaign site for Sid Sharma",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
 export default function RootLayout({

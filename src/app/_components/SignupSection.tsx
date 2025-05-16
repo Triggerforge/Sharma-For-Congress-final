@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { api } from "~/trpc/react"; // Make sure this is the correct import path for your project
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mjkwlyve"; // Replace this with your Formspree form ID
 
 export default function SignupSection() {
   const [formData, setFormData] = useState({
@@ -13,8 +14,24 @@ export default function SignupSection() {
     phone: '',
   });
 
-  const newsletter = api.newsletter.submit.useMutation({
-    onSuccess: () => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    const response = await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
       alert("Thank you for signing up!");
       setFormData({
         first: '',
@@ -23,21 +40,11 @@ export default function SignupSection() {
         zip: '',
         phone: '',
       });
-    },
-    onError: (error) => {
-      console.error(error);
+    } else {
       alert("Something went wrong. Please try again.");
-    },
-  });
+    }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    newsletter.mutate(formData);
+    setSubmitting(false);
   };
 
   return (
@@ -107,15 +114,16 @@ export default function SignupSection() {
 
             <button
               type="submit"
-              className="bg-red-600 text-white font-heading font-bold px-6 py-3 rounded mt-4 hover:bg-red-700 transition"
+              disabled={submitting}
+              className="bg-red-600 text-white font-heading font-bold px-6 py-3 rounded mt-4 hover:bg-red-700 transition disabled:opacity-50"
             >
-              I'M IN
+              {submitting ? "Submitting..." : "I'M IN"}
             </button>
           </form>
 
           {/* Legal text */}
           <p className="text-xs text-white mt-4 max-w-md">
-            By submitting your cell phone number you are agreeing to receive periodic text messages from this organization. Message and data rates may apply. 
+            By submitting your cell phone number you are agreeing to receive periodic text messages from this organization. Message and data rates may apply.
             <a href="/privacy-policy" className="text-red-400 underline ml-1">Privacy Policy</a>
           </p>
         </div>

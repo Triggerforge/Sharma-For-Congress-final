@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { api } from "~/trpc/react"; // make sure this is the correct path to your TRPC hook setup
 
 const options = ["Events", "Yard Signs", "Phone Calls"];
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeognajb";
 
 export default function GetInvolved() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -19,26 +19,7 @@ export default function GetInvolved() {
     phone: '',
   });
 
-  const signup = api.signup.submit.useMutation({
-    onSuccess: () => {
-      alert("Thank you for signing up!");
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        phone: '',
-      });
-      setSelectedOptions([]);
-    },
-    onError: (err) => {
-      console.error(err);
-      alert("There was an error. Please try again.");
-    },
-  });
+  const [submitting, setSubmitting] = useState(false);
 
   const toggleOption = (option: string) => {
     setSelectedOptions((prev) =>
@@ -51,15 +32,44 @@ export default function GetInvolved() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
 
-    signup.mutate({
-      ...formData,
-      first: formData.firstName,
-      last: formData.lastName,
-      helpTypes: selectedOptions.join(", "),
+    const response = await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        first: formData.firstName,
+        last: formData.lastName,
+        email: formData.email,
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        zip: formData.zip,
+        phone: formData.phone,
+        helpTypes: selectedOptions.join(", "),
+      }),
     });
+
+    if (response.ok) {
+      alert("Thank you for signing up!");
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        phone: '',
+      });
+      setSelectedOptions([]);
+    } else {
+      alert("There was an error. Please try again.");
+    }
+
+    setSubmitting(false);
   };
 
   return (
@@ -121,9 +131,10 @@ export default function GetInvolved() {
           <div className="col-span-1 md:col-span-2 flex justify-center">
             <button
               type="submit"
-              className="bg-red-600 text-white font-bold font-heading px-8 py-4 rounded-md hover:bg-indigo-950 transition mt-6"
+              disabled={submitting}
+              className="bg-red-600 text-white font-bold font-heading px-8 py-4 rounded-md hover:bg-indigo-950 transition mt-6 disabled:opacity-50"
             >
-              I'M IN
+              {submitting ? "Submitting..." : "I'M IN"}
             </button>
           </div>
         </form>
