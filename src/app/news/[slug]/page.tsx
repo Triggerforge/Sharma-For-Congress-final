@@ -1,7 +1,7 @@
 // app/blog/[slug]/page.tsx
 import { sanity } from '~/lib/sanity';
 import { PortableText } from '@portabletext/react';
-import Image from 'next/image';
+import SignupSection from "~/app/_components/SignupSection";
 
 
 export async function generateStaticParams() {
@@ -20,9 +20,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   return (
 
-    <><div className="p-8">
-        <h1 className="text-3xl font-bold">{post.title}</h1>
-        <p className="text-sm text-gray-500">{new Date(post.publishedAt).toLocaleDateString()}</p>
+    <><section className="w-full bg-[#fdfaf6] py-16 px-4 lg:px-20">
+      <div className="p-25">
+        <h1 className="text-5xl font-heading mb-6 uppercase text-indigo-950">{post.title}</h1>
+        <p className="text-sm text-gray-500 my-12">{new Date(post.publishedAt).toLocaleDateString()}</p>
         {post.mainImage?.asset?.url && (
           <img src={post.mainImage.asset.url} className="w-full my-4 rounded" />
         )}
@@ -31,6 +32,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <PortableText value={post.body} />
         </div>
 
-      </div></>
+      </div>
+    </section><SignupSection /></>
   );
 }
