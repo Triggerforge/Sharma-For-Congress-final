@@ -2,12 +2,14 @@ import { sanity } from '~/lib/sanity';
 import { PortableText } from '@portabletext/react';
 import SignupSection from '~/app/_components/SignupSection';
 
+// Generate all blog slugs at build time
 export async function generateStaticParams() {
   const slugs = await sanity.fetch(`*[_type == "post"]{ "slug": slug.current }`);
   return slugs.map((s: any) => ({ slug: s.slug }));
 }
 
-export default async function BlogPostPage({
+// Main blog page
+export default async function Page({
   params,
 }: {
   params: { slug: string };
@@ -29,10 +31,16 @@ export default async function BlogPostPage({
       <section className="w-full bg-[#fdfaf6] py-16 px-4 lg:px-20">
         <div className="p-8 lg:p-16">
           <h1 className="text-5xl font-heading mb-6 uppercase text-indigo-950">{post.title}</h1>
-          <p className="text-sm text-gray-500 mb-12">{new Date(post.publishedAt).toLocaleDateString()}</p>
+          <p className="text-sm text-gray-500 mb-12">
+            {new Date(post.publishedAt).toLocaleDateString()}
+          </p>
 
           {post.mainImage?.asset?.url && (
-            <img src={post.mainImage.asset.url} className="w-full my-4 rounded" alt={post.title} />
+            <img
+              src={post.mainImage.asset.url}
+              className="w-full my-4 rounded"
+              alt={post.title}
+            />
           )}
 
           <div className="prose prose-lg max-w-none text-gray-800">
