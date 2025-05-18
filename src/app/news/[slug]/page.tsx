@@ -4,13 +4,13 @@ import { PortableText } from '@portabletext/react';
 import SignupSection from '~/app/_components/SignupSection';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
+interface NewsPageProps {
   params: {
     slug: string;
   };
 }
 
-export default async function BlogPostPage({ params }: PageProps) {
+export default async function BlogPostPage({ params }: NewsPageProps) {
   const post = await sanity.fetch(
     `*[_type == "post" && slug.current == $slug][0]{
       title,
