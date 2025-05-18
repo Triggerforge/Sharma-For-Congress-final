@@ -3,16 +3,21 @@ import { getPostsQuery } from '~/lib/queries';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaFacebookF, FaTwitter, FaEnvelope } from 'react-icons/fa';
-import SignupSection from "~/app/_components/SignupSection";
+import SignupSection from '~/app/_components/SignupSection';
 
-// Add this to support URL query param
 interface Props {
-  searchParams?: { page?: string };
+  searchParams?: Record<string, string | string[] | undefined>;
 }
 
 export default async function NewsPage({ searchParams }: Props) {
-  const postsPerPage = 5; // Number of posts per page
-  const page = parseInt(searchParams?.page || "1");
+  const postsPerPage = 5;
+
+  // Safely extract and parse the "page" param
+  const pageParam = Array.isArray(searchParams?.page)
+    ? searchParams?.page[0]
+    : searchParams?.page;
+  const page = parseInt(pageParam || '1', 10);
+
   const allPosts: any[] = await sanity.fetch(getPostsQuery);
   const totalPages = Math.ceil(allPosts.length / postsPerPage);
   const paginatedPosts = allPosts.slice((page - 1) * postsPerPage, page * postsPerPage);
@@ -20,8 +25,8 @@ export default async function NewsPage({ searchParams }: Props) {
   const formatDate = (publishedAt: string) => {
     const date = new Date(publishedAt);
     return {
-      month: date.toLocaleString("en-US", { month: "short" }).toUpperCase(),
-      day: date.getDate().toString().padStart(2, "0"),
+      month: date.toLocaleString('en-US', { month: 'short' }).toUpperCase(),
+      day: date.getDate().toString().padStart(2, '0'),
     };
   };
 
@@ -49,22 +54,20 @@ export default async function NewsPage({ searchParams }: Props) {
             const { month, day } = formatDate(post.publishedAt);
             const previewText =
               post.body
-                ?.filter((b: any) => b._type === "block")
-                ?.map((b: any) => b.children.map((c: any) => c.text).join(" "))
-                ?.join(" ")
-                ?.split(" ")
+                ?.filter((b: any) => b._type === 'block')
+                ?.map((b: any) => b.children.map((c: any) => c.text).join(' '))
+                ?.join(' ')
+                ?.split(' ')
                 ?.slice(0, 50)
-                ?.join(" ") + '...';
+                ?.join(' ') + '...';
 
             return (
               <div key={post._id} className="flex flex-col md:flex-row gap-6 border-l-2 pl-4 border-gray-200">
-                {/* Date block */}
                 <div className="flex flex-col items-center justify-start w-20">
                   <span className="text-red-600 font-bold text-sm">{month}</span>
                   <span className="bg-red-600 text-white font-bold text-xl px-2 py-1 rounded">{day}</span>
                 </div>
 
-                {/* Post content */}
                 <div className="flex-1">
                   <Link href={`/news/${post.slug.current}`}>
                     <h2 className="text-3xl font-heading mb-6 uppercase text-indigo-950 hover:underline">
@@ -83,7 +86,6 @@ export default async function NewsPage({ searchParams }: Props) {
                     </Link>
                   </div>
 
-                  {/* Social icons */}
                   <div className="flex items-center gap-4 mt-2 text-gray-600 text-sm">
                     <FaFacebookF className="hover:text-blue-600 cursor-pointer" />
                     <FaTwitter className="hover:text-blue-400 cursor-pointer" />
@@ -99,13 +101,13 @@ export default async function NewsPage({ searchParams }: Props) {
         <div className="flex justify-between items-center mt-12 font-bold text-red-600 text-sm">
           <Link
             href={`/news?page=${page - 1}`}
-            className={page > 1 ? "hover:underline" : "pointer-events-none text-gray-300"}
+            className={page > 1 ? 'hover:underline' : 'pointer-events-none text-gray-300'}
           >
             ← PREVIOUS
           </Link>
           <Link
             href={`/news?page=${page + 1}`}
-            className={page < totalPages ? "hover:underline" : "pointer-events-none text-gray-300"}
+            className={page < totalPages ? 'hover:underline' : 'pointer-events-none text-gray-300'}
           >
             NEXT →
           </Link>
