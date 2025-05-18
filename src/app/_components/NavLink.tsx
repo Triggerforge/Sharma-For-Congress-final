@@ -16,12 +16,12 @@ export default function NavLink({ href, children, icon }: NavLinkProps) {
   return (
     <Link
       href={href}
-      className="relative group font-heading text-xl block py-5 border-b border-white w-full text-center"
+      className="relative group text-xl block py-5 border-b border-white w-full text-center"
     >
       <div className="flex justify-between items-center w-full px-4 z-10 relative">
-        <span className="uppercase text-white transition-colors duration-300 group-hover:text-white">
+        <h1 className="uppercase font-heading text-white transition-colors duration-300 group-hover:text-white">
           {children}
-        </span>
+        </h1>
         {icon && (
           <span className="ml-2 text-5xl font-bold text-white transition-colors duration-300 group-hover:text-white">
             {icon}

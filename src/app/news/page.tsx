@@ -1,20 +1,19 @@
-import { sanity } from '~/lib/sanity';
-import { getPostsQuery } from '~/lib/queries';
+import { sanity } from '../../lib/sanity';
+import { getPostsQuery } from '../../lib/queries';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaFacebookF, FaTwitter, FaEnvelope } from 'react-icons/fa';
-import SignupSection from '~/app/_components/SignupSection';
+import SignupSection from '../_components/SignupSection';
 
-interface Props {
+export default async function NewsPage({
+  searchParams,
+}: {
   searchParams?: Record<string, string | string[] | undefined>;
-}
-
-export default async function NewsPage({ searchParams }: Props) {
+}) {
   const postsPerPage = 5;
 
-  // Safely extract and parse the "page" param
   const pageParam = Array.isArray(searchParams?.page)
-    ? searchParams?.page[0]
+    ? searchParams.page[0]
     : searchParams?.page;
   const page = parseInt(pageParam || '1', 10);
 

@@ -53,9 +53,9 @@ export default function IssuesPage() {
                 }`}
                 style={{ backgroundImage: `url(${issue.image})` }}
               />
-              <span className="z-10 relative text-center px-2">
+              <h3 className="z-10 relative text-center px-2">
                 {issue.title}
-              </span>
+              </h3>
             </div>
           ))}
         </div>

@@ -25,7 +25,7 @@ export default function IssuesSection() {
         {issues.map((issue, idx) => (
           <div key={idx} className="flex flex-col items-center gap-4">
             {issue.icon}
-            <h3 className="text-xl font-heading font-extrabold text-indigo-950 uppercase">
+            <h3 className="text-xl font-extrabold text-indigo-950 uppercase">
               {issue.title}
             </h3>
             <p className="text-neutral-700 font-medium">{issue.description}</p>

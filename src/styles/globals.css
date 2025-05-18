@@ -2,14 +2,24 @@
 
 @import "tailwindcss";
 
-@theme {
-  --font-sans: "Open Sans", sans-serif;
-  --font-heading: "Oswald", sans-serif;
+:root {
+  --font-sans: 'Open Sans', sans-serif;
+  --font-heading: var(--font-oswald); /* 🔁 POINT THIS TO NEXT FONT VARIABLE */
   --color-primary: #c41e3a;
-  /*--color-dark: #01132a; */
   --color-dark: #E01F26;
 }
 
-body {
-  font-family: var(--font-sans);
+@layer base {
+  h1, h2, h3, h4, h5, h6,
+  button,
+  [role="button"],
+  .btn,
+  a.bg-indigo-950,
+  a.bg-red-600,
+  a.rounded-md,
+  a[class*="bg-"],
+  a[class*="py-"],
+  a[class*="rounded"] {
+    font-family: var(--font-heading);
+  }
 }

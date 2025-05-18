@@ -4,7 +4,7 @@ import { getPostsQuery } from "~/lib/queries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
-import TwitterFeed from "./TwitterFeed"; // Update path if needed
+import TwitterFeedWrapper from "./TwitterFeedWrapper"; // ✅ wrapped + isolated
 
 export default async function NewsAndTweets() {
   const posts: any[] = await sanity.fetch(getPostsQuery);
@@ -14,7 +14,7 @@ export default async function NewsAndTweets() {
     const date = new Date(publishedAt);
     return {
       month: date.toLocaleString("en-US", { month: "short" }).toUpperCase(),
-      day: date.getDate().toString().padStart(2, "0"),
+      day: date.getDate().toString().padStart(2, '0'),
     };
   };
 
@@ -42,13 +42,11 @@ export default async function NewsAndTweets() {
 
               return (
                 <div key={post._id} className="flex flex-col md:flex-row gap-6 border-l-2 pl-4 border-gray-200">
-                  {/* Date block */}
                   <div className="flex flex-col items-center justify-start w-20">
                     <span className="text-red-600 font-bold text-sm">{month}</span>
                     <span className="bg-red-600 text-white font-bold text-xl px-2 py-1 rounded">{day}</span>
                   </div>
 
-                  {/* Post content */}
                   <div className="flex-1">
                     <Link href={`/news/${post.slug.current}`}>
                       <h3 className="text-2xl font-heading mb-4 uppercase text-indigo-950 hover:underline">
@@ -75,10 +73,9 @@ export default async function NewsAndTweets() {
         {/* Twitter Section */}
         <div className="flex-1">
           <h2 className="text-2xl font-heading mb-6 flex items-center gap-2">
-          
             TWEETS <span className="font-light">BY SID</span>
           </h2>
-          <TwitterFeed />
+          <TwitterFeedWrapper />
         </div>
       </div>
     </section>
