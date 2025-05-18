@@ -7,13 +7,11 @@ export async function generateStaticParams() {
   return slugs.map((s: any) => ({ slug: s.slug }));
 }
 
-interface BlogPageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default async function BlogPostPage({ params }: BlogPageProps) {
+export default async function BlogPostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const post = await sanity.fetch(
     `*[_type == "post" && slug.current == $slug][0]{
       title,
